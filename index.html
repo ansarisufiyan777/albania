@@ -3,6 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Gallery route: ask crawlers not to index (runs before JS bundle). -->
+    <script>
+      (function () {
+        var path = location.pathname.replace(/\/$/, "") || "/";
+        if (!/\/photos$/.test(path)) return;
+        var m = document.createElement("meta");
+        m.id = "gallery-route-robots";
+        m.name = "robots";
+        m.content = "noindex, nofollow";
+        document.head.appendChild(m);
+      })();
+    </script>
     <title>Albania Trip · May 2–9, 2026</title>
     <link rel="stylesheet" href="/main.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />

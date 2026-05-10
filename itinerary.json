@@ -1,0 +1,25 @@
+{
+  "timezone": "Europe/Tirane",
+  "legs": [
+    {
+      "start": "2026-05-03",
+      "end": "2026-05-04",
+      "label": "Arrival"
+    },
+    {
+      "start": "2026-05-05",
+      "end": "2026-05-06",
+      "label": "Berat"
+    },
+    {
+      "start": "2026-05-07",
+      "end": "2026-05-08",
+      "label": "Coast"
+    },
+    {
+      "start": "2026-05-09",
+      "end": "2026-05-10",
+      "label": "Tirana_and_out"
+    }
+  ]
+}

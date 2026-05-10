@@ -1,0 +1,7 @@
+# Paths assume this site is served under base "/albania/" (see vite.config.js).
+# If your domain’s root /robots.txt is managed elsewhere, copy these Disallow lines there.
+
+User-agent: *
+Disallow: /albania/photos
+Disallow: /albania/gallery/
+Disallow: /albania/gallery-manifest.json

@@ -604,7 +604,7 @@ function EventRow({ ev, onEdit, onDelete }) {
   );
 }
 
-export default function App() {
+export default function TripPage({ onOpenPhotos }) {
   const [days, setDays] = useState(initialDays);
   const updateEvent = (di, ei, newEv) => setDays(days.map((day, i) => i !== di ? day : { ...day, events: day.events.map((ev, j) => j !== ei ? ev : newEv) }));
   const deleteEvent = (di, ei) => setDays(days.map((day, i) => i !== di ? day : { ...day, events: day.events.filter((_, j) => j !== ei) }));
@@ -618,6 +618,25 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 4, flexWrap: "wrap" }}>
           <div style={{ fontSize: 22, fontWeight: 700, color: "#1a1a1a", letterSpacing: "-0.3px" }}>🇦🇱 Albania</div>
           <div style={{ fontSize: 16, fontWeight: 500, color: "#555" }}>May 2–9, 2026</div>
+          {typeof onOpenPhotos === "function" && (
+            <button
+              type="button"
+              onClick={onOpenPhotos}
+              style={{
+                marginLeft: "auto",
+                background: "#1a1a1a",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                padding: "6px 12px",
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              📷 Photos
+            </button>
+          )}
         </div>
         <div style={{ fontSize: 13, color: "#888", marginBottom: "1.25rem" }}>
           Sufiyan · Anam · Yusuf Sufiyan · Maryam &nbsp;·&nbsp; Rental car throughout
