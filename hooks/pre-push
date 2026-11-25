@@ -1,0 +1,42 @@
+#!/bin/sh
+set -e
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+tracked_files=$(git ls-files --cached)
+plain_files=
+while IFS= read -r file; do
+  [ -n "$file" ] || continue
+  case "$file" in
+    public/vault/*) continue ;;
+  esac
+  lower_file=$(printf '%s' "$file" | tr '[:upper:]' '[:lower:]')
+  case "$lower_file" in
+    *.jpg|*.jpeg|*.png|*.heic|*.heif|*.mp4|*.mov|*.m4v|*.pdf)
+      plain_files="$plain_files\n$file"
+      ;;
+  esac
+done <<EOF
+$tracked_files
+EOF
+
+if [ -n "$plain_files" ]; then
+  printf 'pre-push: refusing to push tracked/staged plaintext media (remove it from Git first):%b\n' "$plain_files" >&2
+  exit 1
+fi
+
+sync_output=$(node scripts/vault-sync.mjs --from-tty)
+printf '%s\n' "$sync_output"
+
+if printf '%s\n' "$sync_output" | grep -Fqx 'vault: nothing new'; then
+  exit 0
+fi
+
+git add public/vault
+if ! git diff --cached --quiet -- public/vault; then
+  git commit --only -m 'chore(vault): encrypt new media' -- public/vault
+  printf '%s\n' 'pre-push: encrypted media was committed locally, but Git resolved this push before the hook ran.' >&2
+  printf '%s\n' "pre-push: run 'git push' again to upload the vault commit." >&2
+  exit 1
+fi

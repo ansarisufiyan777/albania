@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'wasm-unsafe-eval' 'sha256-U82h2CVykWFrSnbrlvX0Mmspne8wcAoNkUDB48bA5Bc='; worker-src 'self'; connect-src 'self'; img-src 'self' blob: data: https: https://*.tile.openstreetmap.org https://unpkg.com; media-src 'self' blob:; style-src 'self' 'unsafe-inline' https://unpkg.com; font-src 'self'" />
+    <!-- Gallery route: ask crawlers not to index (runs before JS bundle). -->
+    <script>(function(){var path=location.pathname.replace(/\/$/,"")||"/";if(!/\/photos$/.test(path))return;var m=document.createElement("meta");m.id="gallery-route-robots";m.name="robots";m.content="noindex, nofollow";document.head.appendChild(m);})();</script>
+    <title>Albania Trip · May 2–9, 2026</title>
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/main.jsx"></script>
+  </body>
+</html>

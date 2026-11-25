@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      # Bypass package build lifecycle hooks so a plaintext-copying prebuild
+      # cannot run. Run Vite directly instead.
+      - name: Check source tree for plaintext media
+        run: |
+          set -eu
+          matches=$(find . \
+            \( -path './.git' -o -path './node_modules' -o -path './dist' -o -path './public/vault' \) -prune -o \
+            -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.heic' -o -iname '*.heif' -o -iname '*.mp4' -o -iname '*.mov' -o -iname '*.m4v' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.pdf' \) -print)
+          if [ -n "$matches" ]; then
+            echo "Plaintext media found in the source tree:" >&2
+            echo "$matches" >&2
+            exit 1
+          fi
+
+      - run: yarn run vite build && cp dist/index.html dist/404.html
+
+      - name: Check built site for plaintext media
+        run: |
+          set -eu
+          matches=$(find . \
+            \( -path './.git' -o -path './node_modules' -o -path './public/vault' \) -prune -o \
+            -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.heic' -o -iname '*.heif' -o -iname '*.mp4' -o -iname '*.mov' -o -iname '*.m4v' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.pdf' \) -print)
+          if [ -n "$matches" ]; then
+            echo "Plaintext media found in the repository or built site:" >&2
+            echo "$matches" >&2
+            exit 1
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

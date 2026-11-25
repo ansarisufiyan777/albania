@@ -1,0 +1,17 @@
+{
+  "v": 1,
+  "manifestId": "5b16591ebcdccc96253df0e3a87cd9a6",
+  "slots": [
+    {
+      "kdf": {
+        "alg": "argon2id",
+        "m": 65536,
+        "t": 3,
+        "p": 1
+      },
+      "salt": "MqX19/NLgf174q9oTYhXWw==",
+      "nonce": "SAG0Ws/pH8fbLvuN",
+      "wrapped": "UAuy1nTc8kMZ5vwkBAPyZurnN6AD3xHHjUsIvvuGv0Yr+MXr0zZzJOf6r23fldk0"
+    }
+  ]
+}
